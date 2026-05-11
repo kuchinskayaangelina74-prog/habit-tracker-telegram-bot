@@ -1,0 +1,15 @@
+services:
+  database_postgres:
+    image: postgres:15-alpine
+    container_name: habits_postgres_container
+    environment:
+      POSTGRES_USER: habits_admin
+      POSTGRES_PASSWORD: secure_password_123
+      POSTGRES_DB: habits_tracking_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_volume:/var/lib/postgresql/data
+
+volumes:
+  postgres_data_volume:
