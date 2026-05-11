@@ -1,7 +1,11 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_POSTGRES_CONNECTION_URL = "postgresql://habits_admin:secure_password_123@localhost:5432/habits_tracking_db"
+DATABASE_POSTGRES_CONNECTION_URL = os.getenv(
+    "DATABASE_URL", 
+    "postgresql://habits_admin:secure_password_123@localhost:5432/habits_tracking_db"
+)
 
 database_engine_instance = create_engine(
     DATABASE_POSTGRES_CONNECTION_URL,

@@ -1,8 +1,9 @@
+import os
 import telebot
 import requests
 
 TELEGRAM_BOT_ACCESS_TOKEN = "8513493118:AAGK9vhZZ1SPAcpKltDP3xHf6ohLIMUGvmI"
-BACKEND_API_BASE_URL = "http://127.0.0.1:8000"
+BACKEND_API_BASE_URL = os.getenv("BACKEND_API_BASE_URL", "http://127.0.0.1:8000")
 
 user_authentication_tokens_dictionary = {}
 

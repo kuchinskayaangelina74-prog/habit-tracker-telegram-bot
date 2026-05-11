@@ -10,6 +10,41 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U habits_admin -d habits_tracking_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend_fastapi:
+    build: ./backend
+    container_name: habits_backend_container
+    environment:
+      DATABASE_URL: "postgresql://habits_admin:secure_password_123@database_postgres:5432/habits_tracking_db"
+    ports:
+      - "8000:8000"
+    depends_on:
+      database_postgres:
+        condition: service_healthy
+
+  frontend_bot:
+    build: ./frontend
+    container_name: habits_bot_container
+    environment:
+      BACKEND_API_BASE_URL: "http://backend_fastapi:8000"
+    depends_on:
+      - backend_fastapi
+
+  scheduler_alerts:
+    build: ./scheduler
+    container_name: habits_scheduler_container
+    environment:
+      DATABASE_URL: "postgresql://habits_admin:secure_password_123@database_postgres:5432/habits_tracking_db"
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      database_postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data_volume:
